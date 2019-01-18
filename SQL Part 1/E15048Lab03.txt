@@ -1,0 +1,160 @@
+//Create a database
+
+CREATE DATABASE E15048;
+
+//Access the database
+
+USE E15048;
+
+//Create Tables
+
+CREATE TABLE customer (customer_ID int, first_name varchar(20), last_name varchar(20), address1 varchar(20), address2 varchar(20), address3 varchar(20), comments varchar(300));
+
+CREATE TABLE extra_item (item_ID int, item_name varchar(20));
+
+CREATE TABLE orders (order_number int, customer_id int, size varchar(10), colour varchar(10));
+
+//Display Database
+
+SHOW DATABASES;
+
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| e15048             |
+| mysql              |
+| performance_schema |
+| sys                |
++--------------------+
+
+//Display tables
+
+SHOW TABLES;
+
++------------------+
+| Tables_in_e15048 |
++------------------+
+| customer         |
+| extra_item       |
+| orders           |
++------------------+
+
+//Show tables with columns
+
+SHOW COLUMNS FROM orders;
++--------------+-------------+------+-----+---------+-------+
+| Field        | Type        | Null | Key | Default | Extra |
++--------------+-------------+------+-----+---------+-------+
+| order_number | int(11)     | YES  |     | NULL    |       |
+| customer_id  | int(11)     | YES  |     | NULL    |       |
+| size         | varchar(10) | YES  |     | NULL    |       |
+| colour       | varchar(10) | YES  |     | NULL    |       |
++--------------+-------------+------+-----+---------+-------+
+
+SHOW COLUMNS FROM customer;
++-------------+--------------+------+-----+---------+-------+
+| Field       | Type         | Null | Key | Default | Extra |
++-------------+--------------+------+-----+---------+-------+
+| customer_ID | int(11)      | YES  |     | NULL    |       |
+| first_name  | varchar(20)  | YES  |     | NULL    |       |
+| last_name   | varchar(20)  | YES  |     | NULL    |       |
+| address1    | varchar(20)  | YES  |     | NULL    |       |
+| address2    | varchar(20)  | YES  |     | NULL    |       |
+| address3    | varchar(20)  | YES  |     | NULL    |       |
+| comments    | varchar(300) | YES  |     | NULL    |       |
++-------------+--------------+------+-----+---------+-------+
+
+
+SHOW COLUMNS FROM extra_item;
++-----------+-------------+------+-----+---------+-------+
+| Field     | Type        | Null | Key | Default | Extra |
++-----------+-------------+------+-----+---------+-------+
+| item_ID   | int(11)     | YES  |     | NULL    |       |
+| item_name | varchar(20) | YES  |     | NULL    |       |
++-----------+-------------+------+-----+---------+-------+
+
+ALTER TABLE extra_item ADD COLUMN customer_id int;
+
+SHOW COLUMNS FROM extra_item;
++-------------+-------------+------+-----+---------+-------+
+| Field       | Type        | Null | Key | Default | Extra |
++-------------+-------------+------+-----+---------+-------+
+| item_ID     | int(11)     | NO   | PRI | NULL    |       |
+| item_name   | varchar(20) | YES  |     | NULL    |       |
+| customer_id | int(11)     | YES  |     | NULL    |       |
++-------------+-------------+------+-----+---------+-------+
+
+
+SHOW COLUMNS FROM orders;
+
+
+//Add primery keys
+
+ALTER TABLE customer ADD PRIMARY KEY (customer_ID);
+
+ALTER TABLE extra_item ADD PRIMARY KEY (item_ID);
+
+ALTER TABLE orders ADD PRIMARY KEY (order_number);
+
+//Add Foreign keys
+
+ALTER TABLE extra_item ADD FOREIGN KEY (customer_ID) REFERENCES customer (customer_ID);
+
+ALTER TABLE orders ADD FOREIGN KEY (customer_ID) REFERENCES customer (customer_ID);
+
+SHOW COLUMNS FROM extra_item;
++-------------+-------------+------+-----+---------+-------+
+| Field       | Type        | Null | Key | Default | Extra |
++-------------+-------------+------+-----+---------+-------+
+| item_ID     | int(11)     | NO   | PRI | NULL    |       |
+| item_name   | varchar(20) | YES  |     | NULL    |       |
+| customer_id | int(11)     | YES  | MUL | NULL    |       |
++-------------+-------------+------+-----+---------+-------+
+
+SHOW COLUMNS FROM orders;
++--------------+-------------+------+-----+---------+-------+
+| Field        | Type        | Null | Key | Default | Extra |
++--------------+-------------+------+-----+---------+-------+
+| order_number | int(11)     | NO   | PRI | NULL    |       |
+| customer_id  | int(11)     | YES  | MUL | NULL    |       |
+| size         | varchar(10) | YES  |     | NULL    |       |
+| colour       | varchar(10) | YES  |     | NULL    |       |
++--------------+-------------+------+-----+---------+-------+
+
+//Inserting Data
+
+INSERT INTO customer VALUES (1 , 'Gayal', 'Laksara', '129', 'Galahitiyawa', 'Ganemulla', 'Great Service');
+
+INSERT INTO customer VALUES (2 , 'Sasith', 'Dilshan', 'stage 3', 'Missaka Avenue', 'Mihinthalaya', 'Superb Service');
+
+SELECT * from customer;
++-------------+------------+-----------+----------+----------------+--------------+----------------+
+| customer_ID | first_name | last_name | address1 | address2       | address3     | comments       |
++-------------+------------+-----------+----------+----------------+--------------+----------------+
+|           1 | Gayal      | Laksara   | 129      | Galahitiyawa   | Ganemulla    | Great Service  |
+|           2 | Sasith     | Dilshan   | stage 3  | Missaka Avenue | Mihinthalaya | Superb Service |
++-------------+------------+-----------+----------+----------------+--------------+----------------+
+
+//Update data
+
+UPDATE customer set comments = 'Should improve the service' WHERE customer_ID = 2;
+
+SELECT * from customer;
++-------------+------------+-----------+----------+----------------+--------------+----------------------------+
+| customer_ID | first_name | last_name | address1 | address2       | address3     | comments                   |
++-------------+------------+-----------+----------+----------------+--------------+----------------------------+
+|           1 | Gayal      | Laksara   | 129      | Galahitiyawa   | Ganemulla    | Great Service              |
+|           2 | Sasith     | Dilshan   | stage 3  | Missaka Avenue | Mihinthalaya | Should improve the service |
++-------------+------------+-----------+----------+----------------+--------------+----------------------------+
+
+//Delete data
+
+DELETE FROM customer WHERE customer_ID = 1;
+
+SELECT * from customer;
++-------------+------------+-----------+----------+----------------+--------------+----------------------------+
+| customer_ID | first_name | last_name | address1 | address2       | address3     | comments                   |
++-------------+------------+-----------+----------+----------------+--------------+----------------------------+
+|           2 | Sasith     | Dilshan   | stage 3  | Missaka Avenue | Mihinthalaya | Should improve the service |
++-------------+------------+-----------+----------+----------------+--------------+----------------------------+

@@ -1,0 +1,335 @@
+
+
+USE E15048Lab04;
+Database changed
+
+CREATE TABLE Student (
+    Name VARCHAR(50),
+    Registration_Number int,
+    GPA FLOAT,
+    Convocation_Registration_Number INT,
+    Class varchar(10),
+    PRIMARY KEY (Registration_Number));
+
+SHOW COLUMNS FROM Grade;
++---------------------------------+-------------+------+-----+---------+-------+
+| Field                           | Type        | Null | Key | Default | Extra |
++---------------------------------+-------------+------+-----+---------+-------+
+| Name                            | varchar(50) | YES  |     | NULL    |       |
+| Registration_Number             | int(11)     | NO   | PRI | NULL    |       |
+| GPA                             | float       | YES  |     | NULL    |       |
+| Convocation_Registration_Number | int(11)     | YES  |     | NULL    |       |
+| Class                           | varchar(10) | YES  |     | NULL    |       |
++---------------------------------+-------------+------+-----+---------+-------+
+
+1.
+
+INSERT INTO Student VALUES
+    -> ('Sameera', '425', '3.25', NULL, NULL),
+    -> ('Kasun', '210', '3.40', NULL, NULL),
+    -> ('Kalpa', '201', '3.10', NULL, NULL),
+    -> ('Chathura', '312', '3.85', NULL, NULL),
+    -> ('Lakmali', '473', '3.75', NULL, NULL),
+    -> ('Sidath', '352', '3.30', NULL, NULL),
+    -> ('Kumudu', '111', '3.70', NULL, NULL),
+    -> ('Nalin', '456', '3.05', NULL, NULL),
+    -> ('Rohani', '324', '3.70', NULL, NULL),
+    -> ('Chithra', '231', '3.30', NULL, NULL);
+Query OK, 10 rows affected (0.04 sec)
+Records: 10  Duplicates: 0  Warnings: 0
+
+SELECT * FROM Student;
++----------+---------------------+------+---------------------------------+-------+
+| Name     | Registration_Number | GPA  | Convocation_Registration_Number | Class |
++----------+---------------------+------+---------------------------------+-------+
+| Sameera  |                 425 | 3.25 |                            NULL | NULL  |
+| Kasun    |                 210 |  3.4 |                            NULL | NULL  |
+| Kalpa    |                 201 |  3.1 |                            NULL | NULL  |
+| Chathura |                 312 | 3.85 |                            NULL | NULL  |
+| Lakmali  |                 473 | 3.75 |                            NULL | NULL  |
+| Sidath   |                 352 |  3.3 |                            NULL | NULL  |
+| Kumudu   |                 111 |  3.7 |                            NULL | NULL  |
+| Nalin    |                 456 | 3.05 |                            NULL | NULL  |
+| Rohani   |                 324 |  3.7 |                            NULL | NULL  |
+| Chithra  |                 231 |  3.3 |                            NULL | NULL  |
++----------+---------------------+------+---------------------------------+-------+
+
+2.
+
+CREATE TABLE Convocation (
+    Last_Name VARCHAR(20),
+    Address VARCHAR(50),
+    Age INT,
+    Registration_Number INT,
+    Convocation_Registration_Number INT);
+
+ALTER TABLE Convocation ADD FOREIGN KEY (Registration_Number) REFERENCE Student (Registration_Number);
+
+ALTER TABLE Convocation ADD FOREIGN KEY (Registration_Number) REFERENCES Student (Registration_Number) ON DELETE SET NULL ON UPDATE CASCADE;
+
+SHOW COLUMNS FROM Convocation;
++---------------------------------+-------------+------+-----+---------+-------+
+| Field                           | Type        | Null | Key | Default | Extra |
++---------------------------------+-------------+------+-----+---------+-------+
+| Last_Name                       | varchar(20) | YES  |     | NULL    |       |
+| Address                         | varchar(50) | YES  |     | NULL    |       |
+| Age                             | int(11)     | YES  |     | NULL    |       |
+| Registration_Number             | int(11)     | YES  | MUL | NULL    |       |
+| Convocation_Registration_Number | int(11)     | NO   | PRI | NULL    |       |
++---------------------------------+-------------+------+-----+---------+-------+
+
+ALTER TABLE Student ADD FOREIGN KEY (Convocation_Registration_Number) REFERENCES Convocation (Convacation_Registration_Number);
+Query OK, 10 rows affected (0.07 sec)
+Records: 10  Duplicates: 0  Warnings: 0
+
+SHOW COLUMNS FROM Student;
++---------------------------------+-------------+------+-----+---------+-------+
+| Field                           | Type        | Null | Key | Default | Extra |
++---------------------------------+-------------+------+-----+---------+-------+
+| Name                            | varchar(50) | YES  |     | NULL    |       |
+| Registration_Number             | int(11)     | NO   | PRI | NULL    |       |
+| GPA                             | float       | YES  |     | NULL    |       |
+| Convocation_Registration_Number | int(11)     | YES  | MUL | NULL    |       |
+| Class                           | varchar(10) | YES  |     | NULL    |       |
++---------------------------------+-------------+------+-----+---------+-------+
+
+3.
+
+DELIMITER |
+
+CREATE PROCEDURE AddData(
+    LName VARCHAR(20),
+    Address VARCHAR(50),
+    Age INTEGER,
+    RegNumber INTEGER,
+    ConvoNumber INTEGER)
+    BEGIN
+    INSERT INTO Convocation
+    VALUES (LName,Address,Age,RegNumber,ConvoNumber);
+    UPDATE Student SET Convocation_Registration_Number = ConvoNumber WHERE Registration_Number = RegNumber;
+    END |
+
+DELIMITER ;
+
+4.
+
+CALL AddData(
+    'Dassanayake',
+    'No.10,1st Lane, Gampaha',
+    23,
+    425,
+    1);
+Query OK, 10 rows affected (0.02 sec)
+
+CALL AddData(
+    'Senanayake',
+    'No.110, Rose Garden Roade',
+    27,
+    312,
+    2);
+Query OK, 10 rows affected (0.00 sec)
+
+CALL AddData(
+    'Kalhara',
+    'No.10, Temple Road , Ganemulla',
+     22,
+     473,
+     3);
+Query OK, 10 rows affected (0.00 sec)
+
+CALL AddData(
+    'Dilshan',
+    'No.25, Samagi Mawatha, Colombo 8',
+     35,
+     352,
+     4);
+Query OK, 10 rows affected (0.00 sec)
+
+CALL AddData(
+    'Perera',
+    'No.8, Missaka Mawatha, Stage 3',
+     24,
+     456,
+     5);
+
+SELECT * FROM Student;
++----------+---------------------+------+---------------------------------+-------+
+| Name     | Registration_Number | GPA  | Convocation_Registration_Number | Class |
++----------+---------------------+------+---------------------------------+-------+
+| Sameera  |                 425 | 3.25 |                               1 | NULL  |
+| Kasun    |                 210 |  3.4 |                            NULL | NULL  |
+| Kalpa    |                 201 |  3.1 |                            NULL | NULL  |
+| Chathura |                 312 | 3.85 |                               2 | NULL  |
+| Lakmali  |                 473 | 3.75 |                               3 | NULL  |
+| Sidath   |                 352 |  3.3 |                               4 | NULL  |
+| Kumudu   |                 111 |  3.7 |                            NULL | NULL  |
+| Nalin    |                 456 | 3.05 |                               5 | NULL  |
+| Rohani   |                 324 |  3.7 |                            NULL | NULL  |
+| Chithra  |                 231 |  3.3 |                            NULL | NULL  |
++----------+---------------------+------+---------------------------------+-------+
+
+5.
+
+CREATE VIEW Registered
+    AS SELECT Name, Registration_Number, GPA, Convocation_Registration_Number, Address, Age
+    FROM Student,Convocation WHERE RegNumber = Registration_Number;
+Query OK, 0 rows affected (0.10 sec)
+
+mysql> SELECT * FROM Registered;
++----------+---------------------+------+---------------------------------+----------------------------------+------+
+| Name     | Registration_Number | GPA  | Convocation_Registration_Number | Address                          | Age  |
++----------+---------------------+------+---------------------------------+----------------------------------+------+
+| Nalin    |                 456 | 3.05 |                               5 | No.8, Missaka Mawatha, Stage 3   |   24 |
+| Sidath   |                 352 |  3.3 |                               4 | No.25, Samagi Mawatha, Colombo 8 |   35 |
+| Lakmali  |                 473 | 3.75 |                               3 | No.10, Temple Road , Ganemulla   |   22 |
+| Chathura |                 312 | 3.85 |                               2 | No.110, Rose Garden Roade        |   27 |
+| Sameera  |                 425 | 3.25 |                               1 | No.10,1st Lane, Gampaha          |   23 |
++----------+---------------------+------+---------------------------------+----------------------------------+------+
+
+6.
+
+CREATE VIEW NotRegistered
+    ->     AS SELECT Name, Registration_Number, GPA, Convocation_Registration_Number, Address, Age
+    ->     FROM Student,Convocation WHERE Registration_Number NOT IN (SELECT RegNumber FROM Convocation);
+
+SELECT * FROM NotRegistered GROUP BY REGISTRATION_NUMBER;
++---------+---------------------+------+---------------------------------+--------------------------------+------+
+| Name    | Registration_Number | GPA  | Convocation_Registration_Number | Address                        | Age  |
++---------+---------------------+------+---------------------------------+--------------------------------+------+
+| Chithra |                 231 |  3.3 |                            NULL | No.8, Missaka Mawatha, Stage 3 |   24 |
+| Kalpa   |                 201 |  3.1 |                            NULL | No.8, Missaka Mawatha, Stage 3 |   24 |
+| Kasun   |                 210 |  3.4 |                            NULL | No.8, Missaka Mawatha, Stage 3 |   24 |
+| Kumudu  |                 111 |  3.7 |                            NULL | No.8, Missaka Mawatha, Stage 3 |   24 |
+| Rohani  |                 324 |  3.7 |                            NULL | No.8, Missaka Mawatha, Stage 3 |   24 |
++---------+---------------------+------+---------------------------------+--------------------------------+------+
+5 rows in set (0.00 sec)
+
+7.
+
+CREATE TABLE Late_Registration(
+    -> Last_Name VARCHAR(20),
+    -> Address VARCHAR(50),
+    -> AGE INT,
+    -> Registration_Number INT,
+    -> Convocation_Registration_Number INT,
+    -> PRIMARY KEY (Convocation_Registration_Number),
+    -> FOREIGN KEY (Registration_Number) REFERENCES Student (Registration_Number) ON DELETE CASCADE ON UPDATE CASCADE);
+Query OK, 0 rows affected (0.04 sec)
+
+SHOW COLUMNS FROM Late_Registration;
++---------------------------------+-------------+------+-----+---------+-------+
+| Field                           | Type        | Null | Key | Default | Extra |
++---------------------------------+-------------+------+-----+---------+-------+
+| Last_Name                       | varchar(20) | YES  |     | NULL    |       |
+| Address                         | varchar(50) | YES  |     | NULL    |       |
+| AGE                             | int(11)     | YES  |     | NULL    |       |
+| Registration_Number             | int(11)     | YES  | MUL | NULL    |       |
+| Convocation_Registration_Number | int(11)     | NO   | PRI | NULL    |       |
++---------------------------------+-------------+------+-----+---------+-------+
+
+8.
+
+DELIMITER |
+mysql> CREATE TRIGGER AddData
+    -> AFTER INSERT ON Late_Registration
+    -> FOR EACH ROW
+    -> BEGIN
+    -> UPDATE Student SET Student.Convocation_Registration_Number = new.Convocation_Registration_Number WHERE new.Registration_Number = Student.Registration_Number;
+    -> END |
+Query OK, 0 rows affected (0.11 sec)
+
+DELIMITER ;
+
+9.
+
+INSERT INTO Late_Registration VALUES (
+    -> 'Perera',
+    -> 'No. 5, 3rd LANE, Miriswaththa',
+    -> 26,
+    -> 210,
+    -> 6);
+Query OK, 1 row affected (0.00 sec)
+
+INSERT INTO Late_Registration VALUES (
+    -> 'Thilakarathna',
+    -> 'No. 8, Senanayaka Road, Kaluthara',
+    -> 30,
+    -> 201,
+    -> 7);
+Query OK, 1 row affected (0.00 sec)
+
+INSERT INTO Late_Registration VALUES (
+    -> 'Sankalpa',
+    -> 'No.6, Araliya Mawatha, Kadana',
+    -> 23,
+    -> 111,
+    -> 8);
+Query OK, 1 row affected (0.00 sec)
+
+INSERT INTO Late_Registration VALUES (
+    -> 'Dilhani',
+    -> 'No.129,Temple Road, Kurunegala',
+    -> 24,
+    -> 324,
+    -> 9);
+Query OK, 1 row affected (0.00 sec)
+
+INSERT INTO Late_Registration VALUES (
+    -> 'Somapala',
+    -> 'No.5, Galahitiyawa, Ragama',
+    -> 28,
+    -> 231,
+    -> 10);
+Query OK, 1 row affected (0.00 sec)
+
+SELECT * FROM STUDENT;
++----------+---------------------+------+---------------------------------+-------+
+| Name     | Registration_Number | GPA  | Convocation_Registration_Number | Class |
++----------+---------------------+------+---------------------------------+-------+
+| Sameera  |                 425 | 3.25 |                               1 | NULL  |
+| Kasun    |                 210 |  3.4 |                               6 | NULL  |
+| Kalpa    |                 201 |  3.1 |                               7 | NULL  |
+| Chathura |                 312 | 3.85 |                               2 | NULL  |
+| Lakmali  |                 473 | 3.75 |                               3 | NULL  |
+| Sidath   |                 352 |  3.3 |                               4 | NULL  |
+| Kumudu   |                 111 |  3.7 |                               8 | NULL  |
+| Nalin    |                 456 | 3.05 |                               5 | NULL  |
+| Rohani   |                 324 |  3.7 |                               9 | NULL  |
+| Chithra  |                 231 |  3.3 |                              10 | NULL  |
++----------+---------------------+------+---------------------------------+-------+
+
+10.
+
+DELIMITER |
+CREATE PROCEDURE Class()
+    -> BEGIN
+    -> UPDATE Student SET CLASS = 'First class honors' WHERE GPA >= 3.7;
+    -> UPDATE Student SET CLASS = 'Second class honors-upper division' WHERE GPA < 3.7 AND GPA >= 3.3;
+    -> UPDATE Student SET CLASS = 'Second class honors-lower division' WHERE GPA < 3.3 AND GPA >= 2.7;
+    -> UPDATE Student SET CLASS = 'Third class honors' WHERE GPA < 2.7 AND GPA >= 2.0;
+    -> END |
+Query OK, 0 rows affected (0.00 sec)
+
+DELIMITER ;
+
+ALTER TABLE Student CHANGE Class Class VARCHAR(50);
+Query OK, 10 rows affected (0.08 sec)
+Records: 10  Duplicates: 0  Warnings: 0
+
+SELECT * FROM Student;
++----------+---------------------+------+---------------------------------+------------------------------------+
+| Name     | Registration_Number | GPA  | Convocation_Registration_Number | Class                              |
++----------+---------------------+------+---------------------------------+------------------------------------+
+| Sameera  |                 425 | 3.25 |                               1 | Second class honors-lower division |
+| Kasun    |                 210 |  3.4 |                               6 | Second class honors-upper division |
+| Kalpa    |                 201 |  3.1 |                               7 | Second class honors-lower division |
+| Chathura |                 312 | 3.85 |                               2 | First class honors                 |
+| Lakmali  |                 473 | 3.75 |                               3 | First class honors                 |
+| Sidath   |                 352 |  3.3 |                               4 | Second class honors-lower division |
+| Kumudu   |                 111 |  3.7 |                               8 | First class honors                 |
+| Nalin    |                 456 | 3.05 |                               5 | Second class honors-lower division |
+| Rohani   |                 324 |  3.7 |                               9 | First class honors                 |
+| Chithra  |                 231 |  3.3 |                              10 | Second class honors-lower division |
++----------+---------------------+------+---------------------------------+------------------------------------+
+10 rows in set (0.00 sec)
+

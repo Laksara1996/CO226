@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<!-- structure.html by Bill Weinman http://bw.org/contact/ -->
+
+<html lang='en'>
+<head>
+	<style>
+		.div1{
+			width:450px;
+			margin-auto:auto;
+			border:1px solid black;
+			
+		}
+		h1,h2{
+			text-align: left;
+
+		}
+		body{
+			background-color: powderblue;
+		}
+		p{
+			text-align: left;
+		}
+		form{ 
+			line-height:2;
+		}
+
+		son_main,size_main,clour_main,items_main,name_main,address_main,comment_main{
+			width:100%;
+		}
+
+		.son_name,.size_name,.colour_name,.deliver_name,.comment_name{
+			text-align:center;
+			width: 30%;
+			display:inline;
+			float:left;
+		}
+
+		.son_input,.size_input,.colour_input,.item_input,.address_input,.comment_input{
+			width: 70%;
+			display: inline;
+			float:left;
+		}
+
+		.text{
+			text-align:center;
+			width:20%;
+			display:inline;
+			float:left;
+		}
+
+		.deliver{
+			width:80%;
+			display:inline;
+			float:left;
+		}
+
+		.deliver_name{
+			padding-top:50px;
+		}
+		.comment_name{
+			padding-top:70px;
+		}
+		.extra{
+			text-align:center;
+			padding-top:10px;
+			width:30%;
+			display:inline;
+			float:left;
+		}
+		.comment_input{
+			padding-top:5px;
+		}
+		.text_Input{
+			width:170px;
+			height:100px;
+			margin-left:5px;
+		}
+
+	</style>
+    <title>
+        Buy T-shirts Online
+    </title>
+	
+    <link rel="stylesheet" type="text/css" HREF="main.css" />
+</head>
+<div1>	
+<body>
+
+<h1>
+    Buy T-shirts Online
+</h1>
+
+<h2>
+	Fill out the form below and click "Order Now" to order
+</h2>
+
+
+<p>
+<!-- Search by order number-->
+<form action = "http://localhost:8080/Lab02/lab02.php" method = "post">
+	<div class = "son_main">
+	<div class = "son_name">
+		<b>Search by order number:</b>
+	</div>
+	<div class = "son_input">
+		<form name = "search_bar" action = "www.google.lk" method = "get">
+		<input type = "text" name = "order_number">
+		<input type = "button" value = "Search"><br>
+	</div>
+
+<!-- choose your size-->
+	<div class="size_main">
+	<div class="size_name">
+		<b>Choose your size:</B>
+	</div>
+	<div class="size_input">
+		<input type = "radio" name = "size" value = "Small">Small
+		<input type = "radio" name = "size" value = "Medium">Medium
+		<input type = "radio" name = "size" value = "Larger">Large<br>
+	</div>
+
+<!-- Choose your colour-->	
+	<div class="colour_main">
+	<div class="colour_name">
+		<b>Choose your colour:</b>
+	</div>
+	<div class = "colour_input">
+		<select name = "colour">
+		<option value = "Red">Red</option>
+		<option value = "Green">Green</option>
+		<option value = "Blue">Blue</option>
+		<option value = "Yellow">Yellow</option>
+		</select><br>
+	</div>
+
+<!-- Extra Items-->		
+	<div class = "items_main">
+	<div class="">
+	<div class = "extra">
+		<b>Extra Items:</b>
+	</div>
+	<div class = "item_input">
+		<input type = "checkbox" name = "item[]" id = "item" value = "cap">Cap<br>
+		<input type = "checkbox" name = "item[]" id = "item" value = "wrist band">Wrist Band<br>
+	</div>
+
+<!-- names-->
+	<div class = "address_main">
+	<div class = "deliver_name">
+		<b>Deliver To:</b>
+	</div>
+	<div class = "address_input">
+	<div class = "name_main">
+	<div class = "text">
+		<b>First Name:<b>
+	</div>
+	<div class = "deliver">
+		<input type = "text" name = "firstName"><br>
+	</div>
+	<div class = "text">
+		<b>Last Name:<b>
+	</div>
+	<div class = "deliver">
+		<input type = "text" name = "lastName"><br>
+	</div>
+
+<!-- Deliver to-->	
+	<div class = "text">
+		<b>Address1:<b>
+	</div>
+	<div class = "deliver">
+		<input type = "text" name = "address1"><br>
+	</div>
+	<div class = "text">
+		<b>Address2:<b>
+	</div>
+	<div class = "deliver">
+		<input type = "text" name = "address2"><br>
+	</div>
+	<div class = "text">
+		<b>Address3:<b>
+	</div>
+	<div class = "deliver">
+		<input type = "text" name = "address3"><br>
+	</div>
+	</div>
+	</div>
+	</div>
+
+<!-- Comments-->
+	<div class = "comment_main">
+	<div class = "comment_name">
+		<b>Your Comments:</b>
+	</div>
+	<div class = "comment_input">
+		<textarea id = "text_Input" name ="mytextarea" rows = "12" cols="50">
+		</textarea><br>
+		<input type = "submit" >
+	</div>
+	</div>
+</form>
+	
+</p>
+
+</body>
+</div1>
+</html>
